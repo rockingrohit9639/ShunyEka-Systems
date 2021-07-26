@@ -4,9 +4,9 @@ const User = require("../db/userSchema");
 exports.createUser = async (req, res) =>
 {
 
-    const { name, email, phone } = req.body;
+    const { name, email, phones } = req.body;
 
-    if (!name || !email || !phone)
+    if (!name || !email || !phones)
     {
         return res.status(400).send("Please fill in all fields");
     }
@@ -20,7 +20,7 @@ exports.createUser = async (req, res) =>
             return res.status(400).json({ "error": "User already exist" });
         }
 
-        const newUser = new User({ name, email, phone });
+        const newUser = new User({ name, email, phones });
 
         if (newUser)
         {

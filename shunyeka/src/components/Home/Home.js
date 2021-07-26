@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { getAllUsers, deleteUser } from "../../axios/instance";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDataLayerValues } from '../../DataLayer';
 
 const useStyles = makeStyles({
     container: {
@@ -31,6 +32,7 @@ export default function Home()
 {
     const classes = useStyles();
     const [users, setUsers] = React.useState([]);
+    const [{ totalUsers }, dispatch] = useDataLayerValues();
 
     const getUsers = async () =>
     {
@@ -57,6 +59,11 @@ export default function Home()
             const res = await deleteUser(id);
             if (res.status === 200)
             {
+                dispatch({
+                    type: "SET_TOTAL_USERS",
+                    totalUsers: totalUsers - 1
+                });
+
                 toast.success(res.data.message);
                 getUsers();
             }

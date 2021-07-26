@@ -38,7 +38,6 @@ function UserDetails()
             if (id)
             {
                 const userData = await getUserById(id);
-                console.log(userData.data)
                 setUser(userData.data);
             }
             else
@@ -72,10 +71,16 @@ function UserDetails()
                     </Typography>
                     <Typography variant="h4">{user?.email}</Typography>
 
-                    <Typography color="textSecondary" className={classes.mt} gutterBottom>
-                        Phone :
-                    </Typography>
-                    <Typography variant="h4">{user?.phone}</Typography>
+                    {
+                        user?.phones.map((p, idx) => (
+                            <>
+                                <Typography color="textSecondary" className={classes.mt} gutterBottom>
+                                    Phone :
+                                </Typography>
+                                <Typography variant="h4">{p.phone}</Typography>
+                            </>
+                        ))
+                    }
                 </CardContent>
             </Card>
         </div>

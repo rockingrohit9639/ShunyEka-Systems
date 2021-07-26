@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
+import { useDataLayerValues } from "../../DataLayer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
     link: {
         textDecoration: "none",
         color: "#FFF",
+    },
+    count: {
+        marginRight: "0.5rem"
     }
 }));
 
@@ -27,6 +31,7 @@ const Navbar = () =>
 {
 
     const classes = useStyles();
+    const [{ totalUsers }] = useDataLayerValues();
 
     return (
         <div className={classes.root}>
@@ -36,6 +41,10 @@ const Navbar = () =>
                         <Link to="/" className={classes.link}>
                             ShunyEka Systems
                         </Link>
+                    </Typography>
+
+                    <Typography color="inherit" className={classes.count}>
+                        Total Users : {totalUsers}
                     </Typography>
 
                     <Link to="/user?ref=new" className={classes.link}>

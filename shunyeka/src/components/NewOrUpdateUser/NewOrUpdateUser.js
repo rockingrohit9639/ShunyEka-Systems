@@ -8,6 +8,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createUser } from "../../axios/instance";
 import { getUserById, updateUser } from "../../axios/instance";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/Add';
+import { useDataLayerValues } from '../../DataLayer';
 
 const useStyles = makeStyles((theme) => ({
     heading: {
@@ -21,8 +27,17 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         marginTop: "1.5rem"
     },
+    phoneInput: {
+        width: "100%",
+        marginTop: "1.5rem",
+    },
     button: {
         marginTop: "1rem"
+    },
+    phoneBox: {
+        marginTop: "1rem",
+        display: "flex",
+        alignItems: "center",
     }
 }));
 
@@ -30,12 +45,15 @@ export default function NewOrUpdateUser(props)
 {
     const classes = useStyles();
     const ref = new URLSearchParams(props.location.search).get("ref");
+    const [{ totalUsers }, dispatch] = useDataLayerValues();
 
     const [userData, setUserData] = React.useState({
         name: "",
-        email: "",
-        phone: ""
+        email: ""
     });
+    const [phones, setPhones] = React.useState([
+        { phone: "" }
+    ]);
 
     const getUserIfExists = async () =>
     {
@@ -46,9 +64,9 @@ export default function NewOrUpdateUser(props)
                 const user = await getUserById(ref);
                 setUserData({
                     name: user.data.name,
-                    email: user.data.email,
-                    phone: user.data.phone
+                    email: user.data.email
                 });
+                setPhones(user.data.phones);
             }
             catch (err)
             {
@@ -90,10 +108,6 @@ export default function NewOrUpdateUser(props)
         {
             errors.push("Email is not valid");
         }
-        if (userData.phone === "")
-        {
-            errors.push("Phone is required");
-        }
         return errors;
     }
 
@@ -101,14 +115,29 @@ export default function NewOrUpdateUser(props)
     {
         setUserData({
             name: "",
-            email: "",
-            phone: ""
+            email: ""
         });
+
+        setPhones([{ phone: "" }]);
+    }
+
+    const handlePhoneChange = (value, idx) =>
+    {
+        const prevPhones = [...phones];
+        prevPhones[idx].phone = value;
+        setPhones(prevPhones);
     }
 
     const handleSubmit = async (e) =>
     {
         e.preventDefault();
+
+        const data = {
+            name: userData.name,
+            email: userData.email,
+            phones: phones,
+        }
+
         const errors = validate();
         if (errors.length > 0)
         {
@@ -125,17 +154,21 @@ export default function NewOrUpdateUser(props)
             {
                 if (ref === "new")
                 {
-                    const response = await createUser(userData);
+                    const response = await createUser(data);
                     if (response.status === 200)
                     {
                         toast.success(response.data.message);
+                        dispatch({
+                            type: "SET_TOTAL_USERS",
+                            totalUsers: totalUsers + 1
+                        });
                     }
 
                     clearInputs();
                 }
                 else
                 {
-                    const res = await updateUser(ref, userData);
+                    const res = await updateUser(ref, data);
                     if (res.status === 200)
                     {
                         toast.success(res.data.message)
@@ -151,6 +184,18 @@ export default function NewOrUpdateUser(props)
         }
     }
 
+
+    const handleAddPhone = () =>
+    {
+        setPhones([...phones, { phone: "", }]);
+    }
+
+    const handleDelete = (idx) =>
+    {
+        const prevPhones = [...phones];
+        prevPhones.splice(idx, 1);
+        setPhones(prevPhones);
+    }
 
     return (
         <Container maxWidth="sm" className={classes.container}>
@@ -169,10 +214,37 @@ export default function NewOrUpdateUser(props)
             <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
                 <TextField label="Name" name="name" type="text" variant="outlined" value={userData.name} onChange={handleChange} className={classes.input} />
                 <TextField label="Email" name="email" type="email" variant="outlined" value={userData.email} onChange={handleChange} className={classes.input} />
-                <TextField label="Phone" name="phone" variant="outlined" value={userData.phone} onChange={handleChange} className={classes.input} />
+
+
+                {
+                    phones.map((item, idx) => (
+                        <div className={classes.phoneBox} key={idx}>
+                            <PhoneInput
+                                country={'in'}
+                                value={item.phone}
+                                className={classes.input}
+                                onChange={phone => handlePhoneChange(phone, idx)}
+                            />
+
+                            <IconButton aria-label="add" onClick={handleAddPhone}>
+                                <AddIcon />
+                            </IconButton>
+
+                            {idx !== 0 ? <IconButton aria-label="delete" onClick={() => handleDelete(idx)}>
+                                <DeleteIcon />
+                            </IconButton> : null}
+
+                        </div>
+                    ))
+                }
+
+
                 <Button variant="contained" color="primary" type="submit" className={classes.button}>{ref === "new" ? "Add New User" : "Update User"}</Button>
             </form>
         </Container>
 
     );
 }
+
+{/* <TextField label="Phone" name="phone" variant="outlined" value={userData.phone} onChange={handleChange} className={classes.input} /> */ }
+
