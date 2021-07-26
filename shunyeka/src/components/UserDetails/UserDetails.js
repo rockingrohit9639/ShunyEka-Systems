@@ -9,7 +9,7 @@ import { getUserById } from "../../axios/instance";
 const useStyles = makeStyles({
     root: {
         width: "100%",
-        height: "70vh",
+        minHeight: "70vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -74,7 +74,7 @@ function UserDetails()
                     {
                         user?.phones.map((p, idx) => (
                             <>
-                                <Typography color="textSecondary" className={classes.mt} gutterBottom>
+                                <Typography key={idx} color="textSecondary" className={classes.mt} gutterBottom>
                                     Phone :
                                 </Typography>
                                 <Typography variant="h4">{p.phone}</Typography>

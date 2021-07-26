@@ -13,6 +13,7 @@ import { getAllUsers, deleteUser } from "../../axios/instance";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDataLayerValues } from '../../DataLayer';
+import { AmplifySignOut } from "@aws-amplify/ui-react";
 
 const useStyles = makeStyles({
     container: {
@@ -24,6 +25,10 @@ const useStyles = makeStyles({
     link: {
         textDecoration: "none",
         marginRight: "1rem",
+    },
+    logout: {
+        marginTop: "1rem",
+        width: "7rem"
     }
 });
 
@@ -117,6 +122,10 @@ export default function Home()
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            <div className={classes.logout}>
+                <AmplifySignOut />
+            </div>
         </div>
     );
 }

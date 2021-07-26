@@ -7,6 +7,12 @@ import UserDetails from './components/UserDetails/UserDetails';
 import React from 'react';
 import { getAllUsers } from "./axios/instance";
 import { useDataLayerValues } from "./DataLayer";
+import Amplify from "aws-amplify";
+import awsConfig from "./aws-exports";
+import { withAuthenticator } from "@aws-amplify/ui-react";
+
+Amplify.configure(awsConfig);
+
 
 function App()
 {
@@ -48,6 +54,7 @@ function App()
       <Router>
         <Navbar />
         <Switch>
+          
           <Route exact path="/" component={Home} />
           <Route exact path="/user" component={NewOrUpdateUser} />
           <Route exact path="/user/:id" component={UserDetails} />
@@ -59,4 +66,4 @@ function App()
   );
 }
 
-export default App;
+export default withAuthenticator(App);

@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "shunyeka00fef5cb": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

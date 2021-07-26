@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-shunyeka-dev-144732-authRole",
+      "UnauthRoleArn": "arn:aws:iam::576482996103:role/amplify-shunyeka-dev-144732-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::576482996103:role/amplify-shunyeka-dev-144732-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-shunyeka-dev-144732-deployment",
+      "UnauthRoleName": "amplify-shunyeka-dev-144732-unauthRole",
+      "StackName": "amplify-shunyeka-dev-144732",
+      "StackId": "arn:aws:cloudformation:us-east-1:576482996103:stack/amplify-shunyeka-dev-144732/51eae830-edf2-11eb-bf56-0adc8babde53",
+      "AmplifyAppId": "djfmpegsqvnwl"
+    },
+    "categories": {
+      "auth": {
+        "shunyeka00fef5cb": {}
+      }
+    }
+  }
+}

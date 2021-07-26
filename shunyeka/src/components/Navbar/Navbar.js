@@ -52,7 +52,6 @@ const Navbar = () =>
                             Add new user
                         </Button>
                     </Link>
-
                 </Toolbar>
             </AppBar>
         </div>
